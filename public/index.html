@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestion des Données de Vote</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+      }
+      .form-container {
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Gestion des Données de Vote</h1>
+
+    <div class="form-container">
+      <form id="voteForm">
+        <label for="inscrits">Inscrits:</label>
+        <input type="number" id="inscrits" name="inscrits" required />
+        <br />
+        <label for="abstentions">Abstentions:</label>
+        <input type="number" id="abstentions" name="abstentions" required />
+        <br />
+        <label for="votants">Votants:</label>
+        <input type="number" id="votants" name="votants" required />
+        <br />
+        <button type="submit">Ajouter</button>
+      </form>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Inscrits</th>
+          <th>Abstentions</th>
+          <th>Votants</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="dataTable">
+        <!-- Les données seront ajoutées ici dynamiquement -->
+      </tbody>
+    </table>
+
+    <script>
+      const form = document.getElementById("voteForm");
+      const dataTable = document.getElementById("dataTable");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const inscrits = document.getElementById("inscrits").value;
+        const abstentions = document.getElementById("abstentions").value;
+        const votants = document.getElementById("votants").value;
+
+        addRow(inscrits, abstentions, votants);
+        form.reset();
+      });
+
+      function addRow(inscrits, abstentions, votants) {
+        const row = dataTable.insertRow();
+        row.insertCell(0).innerText = inscrits;
+        row.insertCell(1).innerText = abstentions;
+        row.insertCell(2).innerText = votants;
+
+        const actionsCell = row.insertCell(3);
+        const editButton = document.createElement("button");
+        editButton.innerText = "Modifier";
+        editButton.onclick = () => editRow(row);
+        actionsCell.appendChild(editButton);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.innerText = "Supprimer";
+        deleteButton.onclick = () => deleteRow(row);
+        actionsCell.appendChild(deleteButton);
+      }
+
+      function editRow(row) {
+        const cells = row.getElementsByTagName("td");
+        const inscrits = cells[0].innerText;
+        const abstentions = cells[1].innerText;
+        const votants = cells[2].innerText;
+
+        document.getElementById("inscrits").value = inscrits;
+        document.getElementById("abstentions").value = abstentions;
+        document.getElementById("votants").value = votants;
+
+        deleteRow(row);
+      }
+
+      function deleteRow(row) {
+        row.parentNode.removeChild(row);
+      }
+    </script>
+  </body>
+</html>
